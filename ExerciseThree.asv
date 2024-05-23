@@ -52,31 +52,7 @@ axis on;
 axis normal;
 
 % Task.f: Find Local Maxima of H using inbuilt function
-localMax = CalculateLocalMaxima(H);
-
-%Task.g: Plot the found extrema on top of your figure in step f.
-% Plotting the detected extrema on the Hough voting array
-hold on;
-plot(angleRange(localMax(:, 2)), rhoRange(localMax(:, 1)), 's', 'Color', 'red');
-hold off
-
-%Task.h: Using the built-in function houghlines to derive the corresponding line segments.
-lines = houghlines(binaryEdgeMask, angleRange, rhoRange, localMax);
-
-% Task.i: Plot the original image with detected lines
-figure;
-imshow(inputImage);
-hold on;
-title('Detected Lines on Original Image');
-for k = 1:length(lines)
-    xy = [lines(k).point1; lines(k).point2];
-    plot(xy(:,1), xy(:,2), 'LineWidth', 2, 'Color', 'green');
-    
-    % Plot beginnings and ends of lines
-    plot(xy(1,1), xy(1,2), 'x', 'LineWidth', 2, 'Color', 'yellow');
-    plot(xy(2,1), xy(2,2), 'x', 'LineWidth', 2, 'Color', 'red');
-end
-hold off;
+localMax = CalculateLocalMaxima(H, angleRange, rhoRange);
 
 end
 
@@ -153,9 +129,14 @@ end
 end
 
 % Implementing a function to calculate local maxima
-function localMax = CalculateLocalMaxima(H)
+function localMax = CalculateLocalMaxima(H, angleRange, rhoRange)
 
-numMax = 20; % number of maxima to identify
+numMax = 10; % number of maxima to identify
 localMax = houghpeaks(H, numMax);
+
+% Plotting the detected peaks/maximum on the Hough voting array
+hold on;
+plot(angleRange(localMax(:, 2)), rhoRange(localMax(:, 1)), 's', 'Color', 'green');
+hold off
 
 end
